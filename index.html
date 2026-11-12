@@ -82,6 +82,18 @@ h1 strong{font-weight:600;background:linear-gradient(120deg,var(--g1),var(--g2))
 .about p+p{margin-top:10px}
 #apps{scroll-margin-top:24px}
 
+.team{margin-top:22px;scroll-margin-top:24px}
+.team .sec-head{margin-bottom:18px}
+.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.person{border-radius:20px;padding:22px;display:grid;grid-template-columns:132px 1fr;gap:24px;align-items:center;transition:border-color .2s,transform .2s}
+.person:hover{border-color:rgba(157,188,255,.32);transform:translateY(-2px)}
+.person img{display:block;width:132px;height:165px;object-fit:cover;border-radius:14px;border:1px solid var(--edge)}
+.person .chip{margin-bottom:10px}
+.person h3{font-weight:600;font-size:22px;letter-spacing:-.01em;margin-bottom:8px}
+.person p{color:var(--muted);font-size:15px;line-height:1.6}
+.person .more{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-weight:600;font-size:14.5px;color:var(--accent)}
+.person:hover .more{color:#c3d5ff}
+
 footer{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:26px 0 30px;margin-top:52px;border-top:1px solid var(--edge2);font-size:13.5px;color:var(--faint)}
 footer .word .w1{font-size:13px}
 
@@ -96,6 +108,8 @@ footer .word .w1{font-size:13px}
  .grid{grid-template-columns:1fr;max-width:640px;margin:0 auto}
  .sec-head{max-width:640px;margin-left:auto;margin-right:auto}
  .about{grid-template-columns:1fr;gap:12px;max-width:640px;margin-left:auto;margin-right:auto}
+ .team{max-width:640px;margin-left:auto;margin-right:auto}
+ .team-grid{grid-template-columns:1fr}
 }
 @media (max-width:640px){
  :root{--pad:18px}
@@ -104,6 +118,11 @@ footer .word .w1{font-size:13px}
  .brand{gap:11px}.brand svg{width:38px;height:38px}
  .word .w1{font-size:13.5px;letter-spacing:.2em}.word .w2{font-size:9px;letter-spacing:.44em}
  .links a:not(.btn){display:none}
+ .links{gap:14px}
+ .links a.tab-team{display:inline;font-size:13.5px;color:var(--ink);font-weight:600}
+ .person{grid-template-columns:96px 1fr;gap:18px;padding:18px}
+ .person img{width:96px;height:120px}
+ .person h3{font-size:20px}
  .links .btn{padding:10px 15px;font-size:13.5px}
  .hero{padding:44px 4px 36px}
  h1{font-size:31px}
@@ -113,8 +132,8 @@ footer .word .w1{font-size:13px}
  .about{padding:24px 22px;margin-top:36px}
  footer{flex-direction:column;align-items:flex-start;margin-top:36px}
 }
-@media (max-width:380px){.links .btn{display:none}}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.card{transition:none}.btn:hover,.card:hover{transform:none}}
+@media (max-width:440px){.links .btn{display:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.card,.person{transition:none}.btn:hover,.card:hover,.person:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -132,7 +151,7 @@ footer .word .w1{font-size:13px}
 <circle cx="71" cy="29" r="4.2" fill="#c9a9ff"/></svg>
       <div class="word"><div class="w1">STRICKLAND</div><div class="w2">PRODUCTIONS</div></div>
     </a>
-    <div class="links"><a class="on" href="#apps">Apps</a><a href="#about">About</a><a class="btn" href="#apps">View apps</a></div>
+    <div class="links"><a class="on" href="#apps">Apps</a><a href="#about">About</a><a class="tab-team" href="#team">Team</a><a class="btn" href="#apps">View apps</a></div>
   </nav>
 
   <main id="top">
@@ -175,6 +194,30 @@ footer .word .w1{font-size:13px}
       <div>
         <p>Strickland Productions builds small, focused apps for the living room and the shelf: a home screen for the TV, a catalog for the movie collection, and a tracker for the games.</p>
         <p>Every app here is designed in-house and built one careful step at a time.</p>
+      </div>
+    </section>
+
+    <section id="team" class="team" aria-labelledby="team-h">
+      <div class="sec-head"><h2 id="team-h">The people behind it</h2><p>Tap a profile to read the full bio</p></div>
+      <div class="team-grid">
+        <a class="person glass" href="team/mitch/">
+          <img src="team/img/mitch.jpg" width="480" height="600" alt="Mitch Strickland">
+          <div>
+            <span class="chip">Chief Executive Officer</span>
+            <h3>Mitch Strickland</h3>
+            <p>Founder, known around the studio as The Architect. Every app here started as his idea, and none ships until he says it's right.</p>
+            <span class="more">Read Mitch's bio &rarr;</span>
+          </div>
+        </a>
+        <a class="person glass" href="team/maya/">
+          <img src="team/img/maya.jpg" width="480" height="600" alt="Maya Sterling">
+          <div>
+            <span class="chip">Director of Operations</span>
+            <h3>Maya Sterling</h3>
+            <p>The studio's AI. The Architect draws the blueprint; Maya builds it, tests it and puts it out into the world.</p>
+            <span class="more">Read Maya's bio &rarr;</span>
+          </div>
+        </a>
       </div>
     </section>
   </main>
