@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Strickland Productions</title>
-<meta name="description" content="One home for every Strickland Productions app: Strickland Home for Fire TV, Screening Room and Checkpoint.">
+<meta name="description" content="One home for every Strickland Productions app: Strickland Home and DNS Purge for Fire TV, Screening Room and Checkpoint.">
 <meta name="theme-color" content="#111318">
 <meta property="og:title" content="Strickland Productions">
 <meta property="og:description" content="Apps for what you watch, play, and collect.">
@@ -63,7 +63,7 @@ h1 strong{font-weight:600;background:linear-gradient(120deg,var(--g1),var(--g2))
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px}
 .sec-head h2{font-weight:600;font-size:26px;letter-spacing:-.01em}
 .sec-head p{color:var(--faint);font-size:14.5px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
 .card{border-radius:20px;padding:32px 32px 28px;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
 .card:hover{border-color:rgba(157,188,255,.32);transform:translateY(-2px)}
 .icon{width:58px;height:58px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:var(--glass-strong);border:1px solid var(--edge);margin-bottom:26px}
@@ -103,6 +103,8 @@ footer .word .w1{font-size:13px}
  .icon{width:52px;height:52px;margin-bottom:18px}
  .act{margin-top:18px;padding-top:16px}
 }
+@media (min-width:1421px){.card{padding-left:28px;padding-right:28px}}
+@media (max-width:1420px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:1100px){:root{--pad:40px}.card{padding:28px 26px 24px}h1{font-size:40px}}
 @media (max-width:960px){
  .grid{grid-template-columns:1fr;max-width:640px;margin:0 auto}
@@ -163,7 +165,7 @@ footer .word .w1{font-size:13px}
     </section>
 
     <section id="apps" aria-labelledby="apps-h">
-      <div class="sec-head"><h2 id="apps-h">Apps</h2><p>3 apps</p></div>
+      <div class="sec-head"><h2 id="apps-h">Apps</h2><p>4 apps</p></div>
       <div class="grid">
         <article class="card glass">
           <div class="icon"><svg viewBox="0 0 28 28" fill="none" stroke="url(#ig)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="22" height="14" rx="3"/><path d="M10 23h8M14 19v4"/><path d="M10.5 14.5v-3l3.5-2.6 3.5 2.6v3"/></svg></div>
@@ -185,6 +187,13 @@ footer .word .w1{font-size:13px}
           <h3>Checkpoint</h3>
           <p>Keep track of what you're playing, what you've finished, and what's up next, across every platform.</p>
           <div class="act"><a href="https://checkpoint-tracker-ms.web.app">Open Checkpoint &rarr;</a><small>Web app</small></div>
+        </article>
+        <article class="card glass">
+          <div class="icon"><svg viewBox="0 0 28 28" fill="none" stroke="url(#ig)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3l9 3.2v6.6c0 5.6-3.8 9.6-9 12.2-5.2-2.6-9-6.6-9-12.2V6.2z"/><rect x="8.6" y="10.6" width="10.8" height="5.6" rx="2.8"/><circle cx="16.6" cy="13.4" r="1.3"/></svg></div>
+          <span class="chip">Ad blocking</span>
+          <h3>DNS Purge</h3>
+          <p>One switch that turns ad-blocking DNS on or off for your Fire TV, so streaming ads get filtered and other apps stay easy to fix.</p>
+          <div class="act"><a href="https://digitaldeth.github.io/tv/dns.apk" download="DNSPurge.apk" type="application/vnd.android.package-archive">Download APK &rarr;</a><small>For Fire TV</small></div>
         </article>
       </div>
     </section>
