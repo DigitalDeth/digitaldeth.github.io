@@ -2,8 +2,8 @@
 """Builds activity.json for the Latest activity section of the Strickland Productions homepage.
 
 Run by .github/workflows/activity.yml on a schedule. Reads only what the section shows:
-- Screening Room (Firestore, project watchlist-dc6d2): the five most recently watched movies: title, year,
-  format, poster link, date watched. Read with a short-lived Google token (GOOGLE_TOKEN) from a read-only
+- Screening Room (Firestore, project watchlist-dc6d2): the five movies most recently added to the Movies (to watch)
+  list: title, year, format, poster link, date added. Read with a short-lived Google token (GOOGLE_TOKEN) from a read-only
   service account. Notes, synopses, TV shows and everything else stay private.
 - Checkpoint (public site checkpoint-tracker-ms.web.app): last played games and recent achievements. A platform's
   data file is downloaded only when Checkpoint published a new one, to keep its free hosting allowance.
@@ -56,13 +56,16 @@ def fmt_of(platform):
 
 
 def screening_room():
+    """The five movies most recently added to the Movies (to watch) list, newest first: the same list and order as
+    the app's Movies tab in "Newest added". Watched movies (the Collection) are left out on purpose: most of them were
+    cataloged off the shelf in bulk, so their dates show when they were entered, not when they were watched."""
     tok, uid = os.environ.get('GOOGLE_TOKEN'), os.environ.get('SR_UID')
     if not tok or not uid:
         raise RuntimeError('GOOGLE_TOKEN or SR_UID missing')
     url = (f'https://firestore.googleapis.com/v1/projects/{SR_PROJECT}/databases/(default)/documents/'
            f'users/{uid}:runQuery')
     q = {'structuredQuery': {'from': [{'collectionId': 'movies'}],
-                             'orderBy': [{'field': {'fieldPath': 'watchedOn'}, 'direction': 'DESCENDING'}],
+                             'orderBy': [{'field': {'fieldPath': 'added'}, 'direction': 'DESCENDING'}],
                              'limit': 150}}
     raw = get(url, {'Authorization': f'Bearer {tok}', 'Content-Type': 'application/json'}, json.dumps(q).encode())
     rows = []
@@ -71,18 +74,18 @@ def screening_room():
         if not d:
             continue
         f = d['fields']
-        if fval(f.get('watched')) is not True or fval(f.get('removed')) is True:
+        if fval(f.get('watched')) is True or fval(f.get('removed')) is True:
             continue
-        if (fval(f.get('type')) or 'movie') != 'movie':
+        if (fval(f.get('type')) or 'movie') in ('tv', 'show'):   # TV shows stay private
             continue
-        on, title = fval(f.get('watchedOn')), fval(f.get('title'))
-        if not on or not title:
+        added, title = int(fval(f.get('added')) or 0), fval(f.get('title'))
+        if not added or not title:
             continue
         poster = fval(f.get('poster')) or ''
         rows.append({'title': title, 'year': fval(f.get('year')) or '', 'format': fmt_of(fval(f.get('platform'))),
-                     'poster': poster if poster.startswith('https://') else '', 'watchedOn': on[:10],
-                     '_added': int(fval(f.get('added')) or 0)})
-    rows.sort(key=lambda r: (r['watchedOn'], r['_added']), reverse=True)
+                     'poster': poster if poster.startswith('https://') else '',
+                     'addedOn': datetime.fromtimestamp(added / 1000, TZ).date().isoformat(), '_added': added})
+    rows.sort(key=lambda r: r['_added'], reverse=True)
     out = rows[:5]
     for r in out:
         r.pop('_added')

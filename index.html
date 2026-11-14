@@ -204,7 +204,7 @@ footer .word .w1{font-size:13px}
     <section id="activity" aria-labelledby="activity-h" hidden>
       <div class="sec-head"><h2 id="activity-h">Latest activity</h2><p>Live from Screening Room and Checkpoint</p></div>
       <div class="act">
-        <div class="act-panel act-shelf glass"><div class="act-h"><h3>Recently watched</h3><span>Screening Room</span></div><div class="act-posters" id="act-movies"></div></div>
+        <div class="act-panel act-shelf glass"><div class="act-h"><h3>Recently added</h3><span>Screening Room</span></div><div class="act-posters" id="act-movies"></div></div>
         <div class="act-panel glass"><div class="act-h"><h3>Now playing</h3><span>Checkpoint</span></div><div class="act-list" id="act-games"></div></div>
         <div class="act-panel glass"><div class="act-h"><h3>Achievements</h3><span id="act-month"></span></div><div class="act-list" id="act-ach"></div><div class="act-week" id="act-week" aria-label="Achievements unlocked each day this week"></div></div>
       </div>
@@ -305,8 +305,8 @@ footer .word .w1{font-size:13px}
     var mv=a.movies||[],gm=a.games||[],ac=a.achievements||[];
     if(!mv.length&&!gm.length&&!ac.length)return;
     var box=document.getElementById('act-movies');
-    mv.forEach(function(m){var w=el('div','act-m');var p=el('span','act-poster');if(m.format)p.appendChild(el('span','act-fmt',m.format));img(m.poster,m.title+' poster',p,el('span','ph',m.title));w.appendChild(p);var c=el('span','act-cap');c.appendChild(el('em',null,m.title));c.appendChild(el('small',null,(m.year?m.year+' \u00b7 ':'')+'Watched '+iso(m.watchedOn)));w.appendChild(c);box.appendChild(w)});
-    if(!mv.length)box.appendChild(el('p','act-empty','No movies logged yet.'));
+    mv.forEach(function(m){var w=el('div','act-m');var p=el('span','act-poster');if(m.format)p.appendChild(el('span','act-fmt',m.format));img(m.poster,m.title+' poster',p,el('span','ph',m.title));w.appendChild(p);var c=el('span','act-cap');c.appendChild(el('em',null,m.title));c.appendChild(el('small',null,(m.year?m.year+' \u00b7 ':'')+(m.addedOn?'Added '+iso(m.addedOn):m.watchedOn?'Watched '+iso(m.watchedOn):'')));w.appendChild(c);box.appendChild(w)});
+    if(!mv.length)box.appendChild(el('p','act-empty','No movies on the watchlist yet.'));
     box=document.getElementById('act-games');
     gm.forEach(function(g){var r=el('div','act-game'),c=el('span','act-cover');img(g.image,g.name,c);r.appendChild(c);var i=el('div','act-gi');i.appendChild(el('b',null,g.name));var pct=g.total?Math.round(100*g.unlocked/g.total):0;i.appendChild(el('small',null,g.platform+' \u00b7 '+rel(g.lastPlayed)+(g.total?' \u00b7 '+pct+'% of achievements':'')));if(g.total){var b=el('div','act-bar'),f=el('i');f.style.width=pct+'%';b.appendChild(f);i.appendChild(b)}r.appendChild(i);box.appendChild(r)});
     if(!gm.length)box.appendChild(el('p','act-empty','No games played yet.'));
