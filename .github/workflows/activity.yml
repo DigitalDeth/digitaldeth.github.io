@@ -1,0 +1,51 @@
+name: Latest activity feed
+
+# Refreshes activity.json (the homepage's Latest activity section) from Screening Room and Checkpoint.
+# Runs by itself twice an hour; commits only when something on the page changed. Also runnable by hand.
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: activity-feed
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # commit activity.json
+  id-token: write   # keyless, read-only Google sign-in for Screening Room (Workload Identity Federation)
+
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read-only Google token for Screening Room
+        id: auth
+        continue-on-error: true   # if this fails, the feed keeps the last movies and still updates games
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/582237858228/locations/global/workloadIdentityPools/github/providers/site-activity
+          service_account: site-activity-reader@watchlist-dc6d2.iam.gserviceaccount.com
+          token_format: access_token
+          create_credentials_file: false
+
+      - name: Build activity.json
+        env:
+          GOOGLE_TOKEN: ${{ steps.auth.outputs.access_token }}
+          SR_UID: ${{ secrets.SR_UID }}
+        run: python3 .github/scripts/activity_feed.py activity.json
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- activity.json && git ls-files --error-unmatch activity.json >/dev/null 2>&1; then
+            echo "no change"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add activity.json
+          git commit -q -m "Update latest activity"
+          for i in 1 2 3; do git pull -q --rebase && git push -q && exit 0; sleep 5; done
+          exit 1
